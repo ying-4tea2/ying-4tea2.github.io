@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Development on I have a clever plan...</title>
+		<link>/categories/development/</link>
+		<description>Recent content in Development on I have a clever plan...</description>
+		<generator>Hugo 0.54-DEV -- gohugo.io</generator>
+		<language>en-us</language>
+		<managingEditor>ying_4tea2@163.com (ying-4tea2)</managingEditor>
+		<webMaster>ying_4tea2@163.com (ying-4tea2)</webMaster>
+		<copyright>ying-4tea2 — All rights reserved.</copyright>
+		<lastBuildDate>Mon, 31 Dec 2018 15:14:13 +0800</lastBuildDate>
+		<atom:link href="/categories/development/index.xml" rel="self" type="application/rss+xml" />
+		<item>
+			<title>ubuntu配置记录</title>
+			<link>/posts/ubuntu_install_logs/</link>
+			<pubDate>Mon, 31 Dec 2018 15:14:13 +0800</pubDate>
+			<author>ying_4tea2@163.com (ying-4tea2)</author>
+			<guid>/posts/ubuntu_install_logs/</guid>
+			<description>&lt;p&gt;我用过的linux版本很多，折腾程度arch&amp;gt;&amp;gt;debian&amp;gt;suse&amp;gt;ubuntu&amp;gt;centos，本着少折腾多干活的原则，用了两天centos，太丑了，手痒了又想折腾，默念两声不折腾重装了ubuntu。本篇记录了一些安装和配置过程中的一些通用问题。&lt;/p&gt;
+
+&lt;h2 id=&#34;终端&#34;&gt;终端&lt;/h2&gt;
+
+&lt;p&gt;fish是很好看，配置方便，功能强大，开箱即用，对于我来说最大的问题是不遵从POSIX的&lt;a href=&#34;http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html&#34;&gt;shell规则&lt;/a&gt;，因此常常在source profile时出错。用了一个折中的办法，在.bashrc的末尾&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;exec /usr/bin/fish&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;而我的配置还是放在.bashrc里面，让fish继承bash的设置，而一些只想在fish下面用的设置放在了fish的配置文件里面。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;.config/fish/config.fish&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;输入法&#34;&gt;输入法&lt;/h2&gt;
+
+&lt;p&gt;本来我装的中文ubuntu，但是home目录下一堆中文目录太不便利了，为了汉化而汉化，终端里面频繁换输入法实在是很烦，换成了英文版，因此需要自己弄个输入法。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;sudo apt-get install fcitx-bin  fcitx-ta&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;输入法可以装搜狗，比智能拼音好用一点，&lt;a href=&#34;https://pinyin.sogou.com/linux/?r=pinyin&#34;&gt;官网&lt;/a&gt;上有deb包。&lt;/p&gt;
+
+&lt;h2 id=&#34;科学上网&#34;&gt;科学上网&lt;/h2&gt;
+
+&lt;h3 id=&#34;ss&#34;&gt;ss&lt;/h3&gt;
+
+&lt;p&gt;我的ss server是aes-256gcm加密方式，ss需要3.0以上的版本，并且需要安装为ss提供高级加密所必须的libsodium库，需要用python3-pip手动安装：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip
+
+wget https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
+
+tar xzvf LATEST.tar.gz
+
+cd libsodium*
+
+./configure
+
+sudo make &amp;amp;&amp;amp; sudo make install
+
+echo /usr/local/lib &amp;gt;&amp;gt;  /etc/ld.so.conf
+
+sudo ldconfig&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;编辑ss配置文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;sudo nano /etc/shadowsocks/config.json
+
+{
+
+&amp;#34;server&amp;#34;:&amp;#34;x.x.x.x&amp;#34;,
+
+&amp;#34;server_port&amp;#34;:xxxx,
+
+&amp;#34;local_address&amp;#34;:&amp;#34;127.0.0.1&amp;#34;,
+
+&amp;#34;local_port&amp;#34;:1080,
+
+&amp;#34;password&amp;#34;:&amp;#34;pw&amp;#34;,
+
+&amp;#34;timeout&amp;#34;:600,
+
+&amp;#34;method&amp;#34;:&amp;#34;aes-256-gcm&amp;#34;,的
+
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在ss客户端，用sslocal 运行运行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;sslocal -c /home/ying/shdowsocks.json&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;全局代理&#34;&gt;全局代理&lt;/h3&gt;
+
+&lt;p&gt;用的polipo。&lt;/p&gt;
+
+&lt;p&gt;update： 二手了一个ac-68u路由器，刷了merlin固件，离线安装了&lt;a href=&#34;https://github.com/heweiye/Merlin_Shadowsocks/blob/master/shadowsocks_4.1.5.tar.gz&#34;&gt;ss&lt;/a&gt;，这个ss包目录打包有些问题，.sh脚本找不到安装的文件，需要自己解包按照目录规定再打包一下。用下来，不得不说，worth every penny，网络层装ss实在是太方便了。&lt;/p&gt;
+
+&lt;h2 id=&#34;开发相关&#34;&gt;开发相关&lt;/h2&gt;
+
+&lt;h3 id=&#34;vscode&#34;&gt;vscode&lt;/h3&gt;
+
+&lt;p&gt;去&lt;a href=&#34;https://code.visualstudio.com/Download下载64位的deb包&#34;&gt;https://code.visualstudio.com/Download下载64位的deb包&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt; sudo dpkg -i &amp;lt;file&amp;gt;.deb
+ sudo apt-get install -f # Install dependencies&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;go-v1-11-4&#34;&gt;go v1.11.4&lt;/h3&gt;
+
+&lt;p&gt;ubuntu上的源是1.10版本的，v1.11引入的go modules等一些新功能还是值得去更新一下的:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;wget https://dl.google.com/go/go1.11.4.linux-amd64.tar.gz
+sudo tar -xvf go1.11.linux-amd64.tar.gz
+sudo mv go /usr/local&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;编辑.bashrc 设置路径：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;goland&#34;&gt;goland&lt;/h3&gt;
+
+&lt;p&gt;当我还是固执的逼格崇尚阶段的时候，还对一切IDE不屑一顾，宁愿sublime-&amp;gt;atom-&amp;gt;vscode整一大堆插件搭环境，有生产力的压力后，发现除了C语言，IDE都是最佳选择，而且GOLAND还做得让人无可挑剔，我装，我装还不行吗！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;wget https://download.jetbrains.com/go/goland-2018.3.2.tar.gz
+sudo tar xfz goland-2018.3.2.tar.gz -C /opt/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;.bashrc里设置别名&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;alias goland=&amp;#39;/opt/GoLand-2018.3.2/bin/goland.sh&amp;#39;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后呢，没钱看&lt;a href=&#34;http://idea.lanyus.com/help/help.html&#34;&gt;这里&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;markdown编辑器&#34;&gt;markdown编辑器&lt;/h2&gt;
+
+&lt;p&gt;之前一直vscode写，装一串插件，直到用了&lt;a href=&#34;https://typora.io/#linux&#34;&gt;typra&lt;/a&gt;，完全是沉浸式的写作，还可以画流程图，很强大，全平台，免折腾，强力推荐。&lt;/p&gt;</description>
+		</item>
+	</channel>
+</rss>
