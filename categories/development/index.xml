@@ -28,7 +28,7 @@
 &lt;h2 id=&#34;输入法&#34;&gt;输入法&lt;/h2&gt;
 
 &lt;p&gt;本来我装的中文ubuntu，但是home目录下一堆中文目录太不便利了，为了汉化而汉化，终端里面频繁换输入法实在是很烦，换成了英文版，因此需要自己弄个输入法。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;sudo apt-get install fcitx-bin  fcitx-ta&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;sudo apt-get install fcitx-bin  fcitx-table&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;输入法可以装搜狗，比智能拼音好用一点，&lt;a href=&#34;https://pinyin.sogou.com/linux/?r=pinyin&#34;&gt;官网&lt;/a&gt;上有deb包。&lt;/p&gt;
 
 &lt;h2 id=&#34;科学上网&#34;&gt;科学上网&lt;/h2&gt;
@@ -68,7 +68,7 @@ sudo ldconfig&lt;/pre&gt;&lt;/div&gt;
 
 &amp;#34;timeout&amp;#34;:600,
 
-&amp;#34;method&amp;#34;:&amp;#34;aes-256-gcm&amp;#34;,的
+&amp;#34;method&amp;#34;:&amp;#34;aes-256-gcm&amp;#34;
 
 }&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;在ss客户端，用sslocal 运行运行：&lt;/p&gt;
